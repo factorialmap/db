@@ -7,3 +7,6 @@ data_cars <-
 
 
 write.csv(data_cars, file = "ev_sales_yoy.csv", row.names = FALSE)
+
+
+

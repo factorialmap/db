@@ -1,0 +1,82 @@
+---
+title: "Science doc"
+author: "Marcelo"
+format: html
+editor: visual
+---
+
+## Teste de hipótese
+
+-   A resistência a tração do aço(stailess steel) produzido na usina XPTO permanecia estável com uma resistência média de 72 kg/mm2 e um desvio padrão de 2.0 kg/mm2.
+
+-   A maquina sofreu um ajuste recente.
+
+-   A fim de determinar o efeito do ajuste, 10 amostras foram testadas e coletadas as resistências.
+
+```{r}
+library(tidyverse)
+library(ggpmisc)
+
+
+data_res_steel_hist <- 
+  data.frame(value= rnorm(n=1000,mean = 72,sd = 2))
+
+
+
+data_res_steel_hist %>% 
+  ggplot(aes(x = value))+
+  geom_histogram(bins = 30)+
+  geom_vline(aes(xintercept = mean(value),
+                 color = "red"),
+             linetype = "dashed")+
+  geom_vline(aes(xintercept = mean(value) + sd(value)),
+             linetype = "dashed")+
+  geom_vline(aes(xintercept = mean(value) - sd(value)),
+             linetype = "dashed")+
+  theme(legend.position = "none")
+  
+```
+
+```{r}
+library(tidyverse)
+
+data_resist_steel <- tribble(~amostra, ~forca_kg_mm2,
+                             1,76.20,
+                             2,78.30,
+                             3,76.40,
+                             4,74.70,
+                             5,72.60,
+                             6,78.40,
+                             7,75.70,
+                             8,70.20,
+                             9,73.30,
+                             10,74.20)
+
+data_resist_steel
+```
+
+```{r}
+
+t.test(data_resist_steel, u=72)
+
+```
+
+A probabilidade de \| u0 Z assumir valor tão grande como 4.74 é muito pequena (0.000002). Isto significa que ocorreu um evento muito pouco porvável, ou que a hipótese está incorreta. Susteitaríamos, portanto que a hipótese u = u0 (=72.0) não seja a verdadeira. Chamamos de teste de hipótese a verificação, a partir de uma amostra de observações, se uma hipótese sobre um parâmetro da população, como por exemplo u = u0 (=72.0), é correta ou não.
+
+Quando consideramos que a hipótese não é correta, dizemos que a rejeitamos.
+
+No exemplo, quando a hipótese H0:u =72.0 for verdadeira, é provável que u0 assuma um valor próximo de zero. Portanto, nos testes em que \|u0\| for maior que um certo limite, rejeitamos H0.
+
+Por exemplo, podemos adotar o seguinte procedimento.
+
+> Quando \|u0\|\>= 1.96, rejeitamos H0,
+>
+> e quando \|u0\| M1.96, aceitamos H0.
+
+Seguindo este procedimento, a probabilidade de rejeitar H0 quando é for verdadeira, é
+
+Pr(\|u0\|\>=1.96) = 0.05
+
+Esta probabilidade é chamada de nível de significância, e é geralmente denotada por alpha. Os valores de alpha usualmente adotados são 0.05 (5%) ou 0.01(1%). A região de u0 onde a hipótese H0 é rejeitada é chamada de região de rejeição, e a região onde H0 é aceita é chamada de região de aceitação.
+
+![](images/clipboard-1499860400.png)
